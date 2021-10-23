@@ -10,7 +10,7 @@ node
     {
         withEnv(["MVN_HOME=$mvnHome"]) 
         {
-            withSonarQubeEnv(credentialsId: 'Sonar_Id', installationName: 'SonarQube') 
+            withSonarQubeEnv(credentialsId: 'SonarNewId', installationName: 'SonarQube') 
             {
                 sh '"$MVN_HOME/bin/mvn" org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'  
             }
