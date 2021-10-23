@@ -6,14 +6,7 @@ node
         git 'https://github.com/Ramya2912/course.git'
         mvnHome = tool 'Maven'
     }
-       stage('Build the artifact')
-    {
-        withEnv(["MVN_HOME=$mvnHome"])
-	    {
-            sh '"$MVN_HOME/bin/mvn" clean package'
-        }
-    }
-    stage('Analyze the sourcecode') 
+     stage('Analyze the sourcecode') 
     {
         withEnv(["MVN_HOME=$mvnHome"]) 
         {
@@ -23,6 +16,14 @@ node
             }
         }
     }
+       stage('Build the artifact')
+    {
+        withEnv(["MVN_HOME=$mvnHome"])
+	    {
+            sh '"$MVN_HOME/bin/mvn" clean package'
+        }
+    }
+   
     stage('Upload the Artifact')
     {
        nexusArtifactUploader artifacts: [[artifactId: 'Course', classifier: '', file: '/var/lib/jenkins/workspace/Course_Scripted_Pipeline/target/course.war', type: 'war']], credentialsId: 'Nexus_Id', groupId: 'Course', nexusUrl: '65.0.7.233:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Course', version: '1.0.0.${BUILD_ID}-SNAPSHOT'
