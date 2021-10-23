@@ -1,0 +1,39 @@
+node 
+{
+    def mvnHome
+    stage('Checkout the sourcecode') 
+    {
+        git 'https://github.com/Ramya2912/course.git'
+        mvnHome = tool 'Maven'
+    }
+    stage('Analyze the sourcecode') 
+    {
+        withEnv(["MVN_HOME=$mvnHome"]) 
+        {
+            withSonarQubeEnv(credentialsId: 'Sonar_Id', installationName: 'SonarQube') 
+            {
+                sh '"$MVN_HOME/bin/mvn" org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'  
+            }
+        }
+    }
+    stage('Build the artifact')
+    {
+        withEnv(["MVN_HOME=$mvnHome"])
+	    {
+            sh '"$MVN_HOME/bin/mvn" clean package'
+        }
+    }
+    stage('Upload the Artifact')
+    {
+       nexusArtifactUploader artifacts: [[artifactId: 'Course', classifier: '', file: '/var/lib/jenkins/workspace/Course_Scripted_Pipeline/target/course.war', type: 'war']], credentialsId: 'Nexus_Id', groupId: 'Course', nexusUrl: '13.235.100.3:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Course', version: '1.0.0.${BUILD_ID}-SNAPSHOT'
+    }   
+    stage('Deploy the artifact')
+    {
+        deploy adapters: [tomcat9(credentialsId: 'Tomcat_Id', path: '', url: 'http://13.127.53.210:8080/')], contextPath: 'course', war: '**/*.war'
+    }
+    stage('Email Notification')
+    {
+        emailext body: '', recipientProviders: [developers(), requestor()], subject: 'Deployment of Course', to: 'ramyakommineni91@gmail.com'
+    }
+}
+
