@@ -32,7 +32,7 @@ node
     {
         deploy adapters: [tomcat9(credentialsId: 'Tomcat_Id', path: '', url: 'http://13.127.53.210:8080/')], contextPath: 'course', war: '**/*.war'
     }
-      post 
+      stage('Email Notification')
 {
     always{
           emailext attachLog: true, body: ''' $DEFAULT_CONTENT
