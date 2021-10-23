@@ -35,7 +35,7 @@ node
 {
     always{
           emailext attachLog: true, body: ''' $DEFAULT_CONTENT
-	The Pipeline is ${CAUSE} to deploy the $JOB_NAME''', replyTo: '$DEFAULT_RECIPIENTS', subject: '$DEFAULT_SUBJECT', recipientProviders: [developers(), requestor(), to:  '$DEFAULT_RECIPIENTS'
+	The Pipeline is ${CAUSE} to deploy the $JOB_NAME''', replyTo: '$DEFAULT_RECIPIENTS', subject: '$DEFAULT_SUBJECT', recipientProviders: [developers(), requestor()], to:  '$DEFAULT_RECIPIENTS'
 	}
 	}
 }
