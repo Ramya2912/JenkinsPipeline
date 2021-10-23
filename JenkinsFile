@@ -35,10 +35,8 @@ node
       stage('Email Notification')
 {
 emailext (
-      subject: "Subject: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-        <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+      emailext attachLog: true, body: ''' $DEFAULT_CONTENT
+	The Pipeline is ${CAUSE} to deploy the $JOB_NAME''', replyTo: '$DEFAULT_RECIPIENTS', subject: '$DEFAULT_SUBJECT', recipientProviders: [developers(), requestor()], to:  '$DEFAULT_RECIPIENTS'
     )
 	}
 }
