@@ -30,7 +30,7 @@ node
     }   
     stage('Deploy the artifact')
     {
-        deploy adapters: [tomcat9(credentialsId: 'Tomcat_I', path: '', url: 'http://13.127.53.210:8080/')], contextPath: 'course', war: '**/*.war'
+        deploy adapters: [tomcat9(credentialsId: 'Tomcat_Id', path: '', url: 'http://13.127.53.210:8080/')], contextPath: 'course', war: '**/*.war'
     }
       stage('Email Notification')
 {
